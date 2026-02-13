@@ -1,0 +1,130 @@
+1|#||4|10567|updatePanel|ctl00_MainContentPlaceHolder_ucLicenseLookup_UpdtPanelGridLookup|
+			<div class="modal-window-lookup-results fade bs-example-modal-lg in">
+				<div class="modal-header">
+					
+					<button type='button' class='close' onclick="$('.bs-example-modal-lg').hide().remove();reCaptchaReloadOnModalClose();"><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
+					<h4 class="modal-title">
+						<div id="ctl00_MainContentPlaceHolder_ucLicenseLookup_LookupHelpDiv" class="LookupHelpDesc">-</div>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div>
+	<table class="table table-responsive table-hover table-striped" cellspacing="0" cellpadding="4" rules="all" border="1" id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults" style="border-collapse:collapse;">
+		<thead>
+			<tr class="CavuGridPager" align="center">
+				<td colspan="8"><table border="0">
+					<tr>
+						<td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$10&#39;)">...</a></td><td><span>11</span></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$12&#39;)">12</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$13&#39;)">13</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$14&#39;)">14</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$15&#39;)">15</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$16&#39;)">16</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$17&#39;)">17</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$18&#39;)">18</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$19&#39;)">19</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$20&#39;)">20</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$21&#39;)">...</a></td>
+					</tr>
+				</table></td>
+			</tr><tr class="CavuGridHeader">
+				<th scope="col" style="width:50px;">&nbsp;</th><th scope="col">Name</th><th scope="col">Credential</th><th scope="col">Credential Description</th><th scope="col">Status</th><th scope="col">Status Reason</th><th scope="col">City</th><th scope="col">DBA</th>
+			</tr>
+		</thead><tbody>
+			<tr class="CavuGridRow" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl03_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;702296;853767;0;ANDREW J KUHLBERG;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDREW J KUHLBERG</td><td>2.007824</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>Avon</td><td>&nbsp;</td>
+			</tr><tr class="CavuGridAlter" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl04_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;1081243;1330725;0;ANDREW J RONAN;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDREW J RONAN</td><td>2.010826</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>Norwalk</td><td>&nbsp;</td>
+			</tr><tr class="CavuGridRow" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl05_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;1278884;1412505;0;ANDREW J ROSENSTEIN;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDREW J ROSENSTEIN</td><td>2.011385</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>West Granby </td><td>&nbsp;</td>
+			</tr><tr class="CavuGridAlter" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl06_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;1655591;1933592;0;ANDREW JOSEPH MIGANI;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDREW JOSEPH MIGANI</td><td>2.012543</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>WOODBRIDGE</td><td>&nbsp;</td>
+			</tr><tr class="CavuGridRow" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl07_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;700729;848160;0;ANDREW L MOGELOF;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDREW L MOGELOF</td><td>2.004914</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>Westport</td><td>&nbsp;</td>
+			</tr><tr class="CavuGridAlter" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl08_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;703106;185021;0;ANDREW M MARCUS;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDREW M MARCUS</td><td>2.008654</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>STRATFORD</td><td>&nbsp;</td>
+			</tr><tr class="CavuGridRow" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl09_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;1344231;1524629;0;ANDREW N BLACKWELL;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDREW N BLACKWELL</td><td>2.011610</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>SOUTHBURY</td><td>&nbsp;</td>
+			</tr><tr class="CavuGridAlter" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl10_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;701666;239136;0;ANDREW PONICHTERA DMD;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDREW PONICHTERA DMD</td><td>2.006807</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>WEST HARTFORD</td><td>&nbsp;</td>
+			</tr><tr class="CavuGridRow" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl11_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;1180432;1415910;0;ANDREW R STRICKLAND;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDREW R STRICKLAND</td><td>2.011069</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>Farmington </td><td>&nbsp;</td>
+			</tr><tr class="CavuGridAlter" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl12_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;702264;853712;0;ANDREW SPADINGER;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDREW SPADINGER</td><td>2.007789</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>BRIDGEPORT</td><td>&nbsp;</td>
+			</tr><tr class="CavuGridRow" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl13_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;703754;468395;0;ANDREW WISSA BASTA;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDREW WISSA BASTA</td><td>2.009302</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>STAMFORD</td><td>&nbsp;</td>
+			</tr><tr class="CavuGridAlter" valign="top">
+				<td style="white-space:nowrap;">
+									<a id="ctl00_MainContentPlaceHolder_ucLicenseLookup_gvSearchResults_ctl14_HyperLinkDetail" class="btn btn-primary btn-xs" href="javascript:DisplayLicenceDetail(&#39;1690488;1970189;0;ANDRII SHPORTKO;;0&#39;)">Detail</a>
+							        
+								</td><td>ANDRII SHPORTKO</td><td>2.012650</td><td>Department of Public Health-Dentist</td><td>ACTIVE</td><td>CURRENT</td><td>Easton</td><td>&nbsp;</td>
+			</tr>
+		</tbody><tfoot>
+			<tr class="CavuGridPager" align="center">
+				<td colspan="8"><table border="0">
+					<tr>
+						<td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$10&#39;)">...</a></td><td><span>11</span></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$12&#39;)">12</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$13&#39;)">13</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$14&#39;)">14</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$15&#39;)">15</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$16&#39;)">16</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$17&#39;)">17</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$18&#39;)">18</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$19&#39;)">19</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$20&#39;)">20</a></td><td><a href="javascript:__doPostBack(&#39;ctl00$MainContentPlaceHolder$ucLicenseLookup$gvSearchResults&#39;,&#39;Page$21&#39;)">...</a></td>
+					</tr>
+				</table></td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
+				</div>
+			</div>
+		|0|hiddenField|__EVENTTARGET||0|hiddenField|__EVENTARGUMENT||5056|hiddenField|__VIEWSTATE|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|8|hiddenField|__VIEWSTATEGENERATOR|44A23853|0|hiddenField|__VIEWSTATEENCRYPTED||0|asyncPostBackControlIDs|||0|postBackControlIDs|||91|updatePanelIDs||tctl00$upInvoiceSummary,,tctl00$MainContentPlaceHolder$ucLicenseLookup$UpdtPanelGridLookup,|0|childUpdatePanelIDs|||65|panelsToRefreshIDs||ctl00$MainContentPlaceHolder$ucLicenseLookup$UpdtPanelGridLookup,|3|asyncPostBackTimeout||300|20|formAction||./licenselookup.aspx|14|pageTitle||License Lookup|1035|scriptStartupBlock|ScriptContentNoTags| function pageLoad() {
+
+				$('#PopupLookupDetailBehav_foregroundElement').css('top', '0px');
+      
+				$('.table td table').each(function (index, obj) {
+					convertToPagination(obj)
+				});
+
+				$('#ctl00_OutsidePlaceHolder_licenseDetailPopup_btnComplaint').click(function (event) {
+				    $('#divMultiCredSelect').addClass('modal-credential-window');
+				});
+
+				$('#ctl00_OutsidePlaceHolder_licenseDetailPopup_btnComplaint').mouseup(function (event) {
+				    $('#divMultiCredSelect').addClass('modal-credential-window');
+				}); 
+
+				$('#ctl00_OutsidePlaceHolder_QAWizard_modalpanel').css('width', '98%');
+            
+				$('#chkBxHeader').click(function (e) { 
+				    var table = $(e.target).closest('table');
+				    $('td input:checkbox', table).click();
+				});
+
+				$('#ctl00_OutsidePlaceHolder_QAWizard_ucCavuSectionEdit2_gvKeyIndividuals_ctl01_chkBxHeader').click(function (e) { 
+				    var table = $(e.target).closest('table');
+				    $('td input:checkbox', table).click();
+				}); 
+			}|540|scriptStartupBlock|ScriptContentNoTags|var _divToCoverForWaitMsg = null;
+var _oCurrFilter = new CurrentFilter();
+_oCurrFilter.InitCritTabs('EditFilterBodyID', 'TblCurrentFilterID', 'CritContentID', 'EditFilterTitleID');
+var _oLicenseLookupctl00_MainContentPlaceHolder_ucLicenseLookup= new LicenseLookup();
+_oLicenseLookupctl00_MainContentPlaceHolder_ucLicenseLookup.Init(null,'CritContentID', 'ctl00_MainContentPlaceHolder_ucLicenseLookup_ctl03_lbMultipleCredentialTypePrefix','divLookupErrorMsg','ctl00$MainContentPlaceHolder$ucLicenseLookup$UpdtPanelGridLookup',_oCurrFilter);
+|94|scriptStartupBlock|ScriptContentNoTags|_oLicenseLookupctl00_MainContentPlaceHolder_ucLicenseLookup.LicLookupSetErrMsg('', true, 500);|
