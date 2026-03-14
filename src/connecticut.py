@@ -3,6 +3,7 @@ import os
 import time
 import argparse
 import requests
+import concurrent.futures
 import pandas as pd
 from bs4 import BeautifulSoup
 from http.cookiejar import MozillaCookieJar
@@ -30,6 +31,32 @@ FALLBACK_HEADERS = [
 ]
 
 OUTPUT_CSV = "outputs/connecticut_dentists_landing.csv"
+
+# -----------------------------
+# *** Detail field mapping ***
+# Maps normalized column header text → output CSV column name.
+# The detail page uses horizontal tables (thead headers / tbody single row).
+# Add entries here if new tables appear on the detail page.
+# -----------------------------
+DETAIL_FIELD_MAP = {
+    # Grid0 — Name table
+    "name":                             "detail_name",
+
+    # Grid1 — License Information table
+    "license_type":                     "detail_license_type",
+    "license_number":                   "detail_license_number",
+    "expiration_date":                  "detail_expiration_date",
+    "granted_date":                     "detail_granted_date",
+    "license_name":                     "detail_license_name",
+    "license_status":                   "detail_license_status",
+    # the blank " " column maps to a generic status qualifier
+    "":                                 "detail_status_qualifier",
+    "licensure_actions_or_pending_charges": "detail_licensure_actions",
+}
+
+# All unique output column names (preserving insertion order)
+DETAIL_COLUMNS = list(dict.fromkeys(DETAIL_FIELD_MAP.values()))
+
 
 HEADERS = {
     "Accept": "*/*",
@@ -147,7 +174,6 @@ def ajax_postback(session, hidden, event_target, event_argument=""):
         "__ASYNCPOST": "true",
         "ctl00$ScriptManager1": f"{UPDATE_PANEL_TARGET}|{event_target}",
 
-        # Our search filters
         "ctl00$MainContentPlaceHolder$ucLicenseLookup$ctl03$lbMultipleCredentialTypePrefix": "137",
         "ctl00$MainContentPlaceHolder$ucLicenseLookup$ctl03$ddCredPrefix": "",
         "ctl00$MainContentPlaceHolder$ucLicenseLookup$ctl03$tbLicenseNumber": "",
@@ -218,7 +244,6 @@ def extract_table_rows(delta_text):
             for idx, td in enumerate(tds):
                 text_value = td.get_text(" ", strip=True).replace("\xa0", "")
 
-                # Our first column contains the Detail button and hidden detail token
                 if idx == 0:
                     link = td.find("a", href=True)
                     if link:
@@ -226,18 +251,15 @@ def extract_table_rows(delta_text):
                         m = re.search(r"DisplayLicenceDetail\('([^']+)'\)", href)
                         if m:
                             detail_id = m.group(1)
-                    # We keep the visible button text in the landing file
                     row_values.append(text_value)
                 else:
                     row_values.append(text_value)
 
-            # Normalize row width
             if len(row_values) > len(headers):
                 row_values = row_values[:len(headers)]
             if len(row_values) < len(headers):
                 row_values += [""] * (len(headers) - len(row_values))
 
-            # Skip blank rows
             if all(cell.strip() == "" for cell in row_values):
                 continue
 
@@ -251,7 +273,6 @@ def extract_table_rows(delta_text):
 
         df = pd.DataFrame(rows)
 
-        # Drop pager rows that sometimes slip through
         if "Name" in df.columns:
             df = df[df["Name"].fillna("").astype(str).str.strip() != ""]
 
@@ -265,11 +286,12 @@ def extract_table_rows(delta_text):
 # Detail page fetch + parsing
 # -----------------------------
 
-def fetch_detail_html(session, detail_id):
+def fetch_detail_html(session, detail_id, debug=False):
     if not detail_id:
+        if debug:
+            print(f"  [DEBUG] fetch_detail_html called with empty detail_id — skipping")
         return ""
 
-    # We keep the timestamp parameter because the browser includes it
     params = {
         "id": detail_id,
         "_": str(int(time.time() * 1000)),
@@ -277,6 +299,11 @@ def fetch_detail_html(session, detail_id):
 
     r = session.get(DETAIL_BASE_URL, headers=DETAIL_HEADERS, params=params)
     r.raise_for_status()
+
+    if debug:
+        print(f"  [DEBUG] detail_id={detail_id!r}  status={r.status_code}  len={len(r.text)}")
+        save_debug(f"debug_detail_sample_{detail_id}.html", r.text)
+
     return r.text
 
 
@@ -285,67 +312,113 @@ def normalize_label(text):
 
 
 def parse_detail_html(html):
+    """
+    Parse a detail page where data is stored in horizontal Bootstrap tables:
+      - <thead> contains <th> column headers
+      - <tbody> contains a single <tr> of values
+
+    Each table's headers are mapped through DETAIL_FIELD_MAP to fixed
+    output column names.  Every DETAIL_COLUMN is always present ('' if absent).
+    """
+    result = {col: "" for col in DETAIL_COLUMNS}
+
     if not html:
-        return {}
+        return result
 
     soup = BeautifulSoup(html, "lxml")
-    detail_data = {}
 
-    # Our most common pattern: table rows with label/value cells
-    for tr in soup.find_all("tr"):
-        cells = tr.find_all(["td", "th"], recursive=False)
-        if len(cells) < 2:
+    for table in soup.find_all("table"):
+        thead = table.find("thead")
+        tbody = table.find("tbody")
+        if not thead or not tbody:
             continue
 
-        label = cells[0].get_text(" ", strip=True).replace("\xa0", "")
-        value = cells[1].get_text(" ", strip=True).replace("\xa0", "")
+        headers = [
+            normalize_label(th.get_text(" ", strip=True).replace("\xa0", ""))
+            for th in thead.find_all("th")
+        ]
 
-        if not label:
+        # Only use the first data row
+        data_row = tbody.find("tr")
+        if not data_row:
             continue
 
-        key = normalize_label(label)
+        values = [
+            td.get_text(" ", strip=True).replace("\xa0", "")
+            for td in data_row.find_all("td")
+        ]
 
-        if key and value and key not in detail_data:
-            detail_data[key] = value
+        for header, value in zip(headers, values):
+            col = DETAIL_FIELD_MAP.get(header)
+            if col and not result[col]:   # first match wins
+                result[col] = value
 
-    # Our fallback: some layouts use adjacent label/value divs or spans
-    if not detail_data:
-        text_lines = [line.strip() for line in soup.get_text("\n").splitlines() if line.strip()]
-        for i in range(len(text_lines) - 1):
-            label = text_lines[i]
-            value = text_lines[i + 1]
-            if len(label) <= 60 and ":" in label:
-                key = normalize_label(label.replace(":", ""))
-                if key and key not in detail_data:
-                    detail_data[key] = value
-
-    return detail_data
+    return result
 
 
-def enrich_with_details(session, landing_df, sleep_seconds=0.3):
+def _process_detail(session, record, debug=False):
+    detail_id = record.get("detail_id", "")
+    if detail_id:
+        detail_html = fetch_detail_html(session, detail_id, debug=debug)
+        if detail_html:
+            detail_data = parse_detail_html(detail_html)
+            if debug:
+                filled = {k: v for k, v in detail_data.items() if v}
+                print(f"  [DEBUG] parsed fields for {detail_id}: {list(filled.keys()) or 'NONE'}")
+            record.update(detail_data)
+        else:
+            if debug:
+                print(f"  [DEBUG] empty HTML returned for detail_id={detail_id!r}")
+            record.update({col: "" for col in DETAIL_COLUMNS})
+    else:
+        if debug:
+            print(f"  [DEBUG] no detail_id on record: {record.get('Name', '?')}")
+        record.update({col: "" for col in DETAIL_COLUMNS})
+    return record
+
+
+def enrich_with_details(session, landing_df, max_workers=10):
     if landing_df.empty:
         return landing_df
 
-    enriched_rows = []
+    records = landing_df.to_dict("records")
+    enriched_rows = [None] * len(records)
 
-    for idx, row in landing_df.iterrows():
-        record = row.to_dict()
-        detail_id = record.get("detail_id", "")
+    print(f"Enriching {len(records)} detail pages using {max_workers} threads...")
 
-        detail_html = fetch_detail_html(session, detail_id)
-        if detail_html:
-            detail_data = parse_detail_html(detail_html)
-            record.update(detail_data)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_idx = {
+            executor.submit(_process_detail, session, record.copy()): idx
+            for idx, record in enumerate(records)
+        }
 
-        enriched_rows.append(record)
+        completed = 0
+        for future in concurrent.futures.as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            try:
+                enriched_rows[idx] = future.result()
+            except Exception as e:
+                print(f"Error enriching row {idx}: {e}")
+                row = records[idx].copy()
+                row.update({col: "" for col in DETAIL_COLUMNS})
+                enriched_rows[idx] = row
 
-        # Our polite delay keeps the requests from hammering the site
-        time.sleep(sleep_seconds)
+            completed += 1
+            if completed % 25 == 0:
+                print(f"Enriched {completed}/{len(records)} detail pages")
 
-        if (idx + 1) % 25 == 0:
-            print(f"Enriched {idx + 1}/{len(landing_df)} detail pages")
+    df = pd.DataFrame(enriched_rows)
 
-    return pd.DataFrame(enriched_rows)
+    # Guarantee every detail column exists and is in a predictable order
+    for col in DETAIL_COLUMNS:
+        if col not in df.columns:
+            df[col] = ""
+
+    # Reorder: landing columns first, then detail columns
+    landing_cols = [c for c in df.columns if c not in DETAIL_COLUMNS]
+    df = df[landing_cols + DETAIL_COLUMNS]
+
+    return df
 
 
 # -----------------------------
@@ -355,7 +428,6 @@ def enrich_with_details(session, landing_df, sleep_seconds=0.3):
 def run_pipeline(session, hidden):
     results = []
 
-    # Our page-1 call uses the working update panel trigger
     delta = ajax_postback(
         session,
         hidden,
@@ -412,11 +484,25 @@ def main():
         action="store_true",
         help="Only save landing grid rows without fetching per-dentist detail pages",
     )
+    parser.add_argument(
+        "--debug-details",
+        action="store_true",
+        help="Print detail fetch diagnostics for first 3 rows and save sample HTML to outputs/",
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=10,
+        help="Number of concurrent threads for fetching detail pages",
+    )
     args = parser.parse_args()
 
     ensure_output()
 
     session = requests.Session()
+    adapter = requests.adapters.HTTPAdapter(pool_connections=args.workers, pool_maxsize=args.workers)
+    session.mount("https://", adapter)
+    session.mount("http://", adapter)
     load_cookies(session, args.cookies)
 
     hidden = initial_get(session)
@@ -434,11 +520,39 @@ def main():
         return
 
     print("Fetching individual dentist detail pages...")
-    final_df = enrich_with_details(session, landing_df)
 
-    final_df.to_csv(OUTPUT_CSV, index=False)
-    print(f"SUCCESS: Saved {len(final_df)} enriched rows to {OUTPUT_CSV}")
+    if args.debug_details:
+        print("\n--- DEBUG: testing first 3 detail pages ---")
+        for _, row in landing_df.head(1).iterrows():   # just 1 is enough
+            record = row.to_dict()
+            detail_id = record.get("detail_id", "")
+            html = fetch_detail_html(session, detail_id, debug=True)
+            if html:
+                soup = BeautifulSoup(html, "lxml")
+                print("\n[STRUCTURE] All <tr> blocks found:")
+                for i, tr in enumerate(soup.find_all("tr")[:30]):
+                    cells = tr.find_all(["td", "th"], recursive=False)
+                    texts = [c.get_text(" ", strip=True).replace("\xa0", " ")[:60] for c in cells]
+                    print(f"  tr[{i}] ({len(cells)} cells): {texts}")
+                print("\n[STRUCTURE] All <div> blocks with text:")
+                for div in soup.find_all("div"):
+                    t = div.get_text(" ", strip=True).replace("\xa0", " ")
+                    if 5 < len(t) < 120 and not div.find("div"):  # leaf divs only
+                        print(f"  div.{div.get('class', ['?'])[0]}: {t[:100]}")
+        print("\n--- Check outputs/ for debug_detail_sample_*.html ---\n")
+        return   # stop here so you can review before full run
+
+    final_df = enrich_with_details(session, landing_df, max_workers=args.workers)
+
+    try:
+        final_df.to_csv(OUTPUT_CSV, index=False)
+        print(f"SUCCESS: Saved {len(final_df)} enriched rows to {OUTPUT_CSV}")
+    except PermissionError:
+        alt = OUTPUT_CSV.replace(".csv", "_new.csv")
+        final_df.to_csv(alt, index=False)
+        print(f"WARNING: '{OUTPUT_CSV}' is open (Excel?). Saved to '{alt}' instead.")
 
 
 if __name__ == "__main__":
     main()
+    
